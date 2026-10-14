@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: "global:\n  scrape_interval: 15s\n  evaluation_interval: 15s\nrule_files:\n\
+    - /etc/prometheus/alerts.yml\nscrape_configs:\n- job_name: shoppingcart\n  kubernetes_sd_configs:\n\
+    \  - role: pod\n    namespaces:\n      names:\n      - shoppingcart\n  relabel_configs:\n\
+    \  - source_labels:\n    - __meta_kubernetes_pod_label_app\n    action: keep\n\
+    \    regex: shoppingcart\n  - source_labels:\n    - __meta_kubernetes_pod_container_port_number\n\
+    \    action: keep\n    regex: '8080'\n  - source_labels:\n    - __meta_kubernetes_pod_phase\n\
+    \    action: keep\n    regex: Running\n  - source_labels:\n    - __meta_kubernetes_namespace\n\
+    \    target_label: namespace\n  - source_labels:\n    - __meta_kubernetes_pod_name\n\
+    \    target_label: pod\n  - source_labels:\n    - __meta_kubernetes_pod_label_rollouts_pod_template_hash\n\
+    \    target_label: rollout_hash\n"
+  alerts.yml: "groups:\n- name: shoppingcart\n  rules:\n  - alert: ShoppingCartHighErrorRate\n\
+    \    expr: sum by (rollout_hash) (rate(shoppingcart_requests_total{status=~\"\
+    5..\"}[1m]))\n      / clamp_min(sum by (rollout_hash) (rate(shoppingcart_requests_total[1m])),\
+    \ 0.001)\n      > 0.05\n    for: 15s\n    labels:\n      severity: warning\n \
+    \   annotations:\n      summary: Shopping cart revision is returning over 5% server\
+    \ errors\n  - alert: ShoppingCartPodUnreachable\n    expr: up{job=\"shoppingcart\"\
+    } == 0\n    for: 30s\n    labels:\n      severity: warning\n    annotations:\n\
+    \      summary: Shopping cart metrics endpoint unreachable\n"

@@ -1,0 +1,121 @@
+LAST SEEN   TYPE      REASON                   OBJECT                                    MESSAGE
+33m         Normal    WaitForFirstConsumer     persistentvolumeclaim/postgres-data       waiting for first consumer to be created before binding
+33m         Normal    ScalingReplicaSet        deployment/postgres                       Scaled up replica set postgres-7596548c88 from 0 to 1
+33m         Normal    Provisioning             persistentvolumeclaim/postgres-data       External provisioner is provisioning volume for claim "shoppingcart/postgres-data"
+33m         Normal    ExternalProvisioning     persistentvolumeclaim/postgres-data       Waiting for a volume to be created either by the external provisioner 'rancher.io/local-path' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+33m         Normal    SuccessfulCreate         replicaset/postgres-7596548c88            Created pod: postgres-7596548c88-5rr7d
+33m         Normal    ProvisioningSucceeded    persistentvolumeclaim/postgres-data       Successfully provisioned volume pvc-b4b8c92c-318c-4b00-bc4a-7175f8b1b408
+33m         Normal    Scheduled                pod/postgres-7596548c88-5rr7d             Successfully assigned shoppingcart/postgres-7596548c88-5rr7d to shoppingcart-control-plane
+33m         Normal    Pulling                  pod/postgres-7596548c88-5rr7d             Pulling image "postgres:16-alpine"
+30m         Normal    Started                  pod/postgres-7596548c88-5rr7d             Container started
+30m         Normal    Pulled                   pod/postgres-7596548c88-5rr7d             Successfully pulled image "postgres:16-alpine" in 25.574s (2m44.166s including waiting). Image size: 113905390 bytes.
+30m         Normal    Created                  pod/postgres-7596548c88-5rr7d             Container created
+30m         Normal    RolloutNotCompleted      rollout/shoppingcart                      Rollout not completed, started update to revision 1 (755f76544f)
+30m         Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled up ReplicaSet shoppingcart-755f76544f (revision 1) from 0 to 4
+30m         Normal    SuccessfulCreate         replicaset/demo-traffic-687686f5bb        Created pod: demo-traffic-687686f5bb-7944j
+30m         Normal    Created                  pod/shoppingcart-755f76544f-7n7hl         Container created
+30m         Normal    Pulled                   pod/shoppingcart-755f76544f-7n7hl         Container image "shoppingcart:v1" already present on machine and can be accessed by the pod
+30m         Normal    Scheduled                pod/shoppingcart-755f76544f-7n7hl         Successfully assigned shoppingcart/shoppingcart-755f76544f-7n7hl to shoppingcart-control-plane
+30m         Normal    Pulling                  pod/demo-traffic-687686f5bb-7944j         Pulling image "python:3.12-alpine"
+30m         Normal    Scheduled                pod/shoppingcart-755f76544f-b4clr         Successfully assigned shoppingcart/shoppingcart-755f76544f-b4clr to shoppingcart-control-plane
+30m         Normal    Pulled                   pod/shoppingcart-755f76544f-b4clr         Container image "shoppingcart:v1" already present on machine and can be accessed by the pod
+30m         Normal    Created                  pod/shoppingcart-755f76544f-b4clr         Container created
+30m         Normal    Started                  pod/shoppingcart-755f76544f-b4clr         Container started
+30m         Normal    Started                  pod/shoppingcart-755f76544f-7n7hl         Container started
+30m         Normal    Scheduled                pod/shoppingcart-755f76544f-l6lzn         Successfully assigned shoppingcart/shoppingcart-755f76544f-l6lzn to shoppingcart-control-plane
+30m         Normal    Scheduled                pod/shoppingcart-755f76544f-vz5ts         Successfully assigned shoppingcart/shoppingcart-755f76544f-vz5ts to shoppingcart-control-plane
+30m         Normal    RolloutCompleted         rollout/shoppingcart                      Rollout completed update to revision 1 (755f76544f): Initial deploy
+30m         Normal    Pulled                   pod/shoppingcart-755f76544f-vz5ts         Container image "shoppingcart:v1" already present on machine and can be accessed by the pod
+30m         Normal    NewReplicaSetCreated     rollout/shoppingcart                      Created ReplicaSet shoppingcart-755f76544f (revision 1)
+30m         Normal    RolloutUpdated           rollout/shoppingcart                      Rollout updated to revision 1
+30m         Normal    Pulled                   pod/shoppingcart-755f76544f-l6lzn         Container image "shoppingcart:v1" already present on machine and can be accessed by the pod
+30m         Normal    Created                  pod/shoppingcart-755f76544f-l6lzn         Container created
+30m         Normal    ScalingReplicaSet        deployment/demo-traffic                   Scaled up replica set demo-traffic-687686f5bb from 0 to 1
+30m         Normal    Started                  pod/shoppingcart-755f76544f-l6lzn         Container started
+30m         Normal    Scheduled                pod/demo-traffic-687686f5bb-7944j         Successfully assigned shoppingcart/demo-traffic-687686f5bb-7944j to shoppingcart-control-plane
+30m         Normal    RolloutAddedToInformer   rollout/shoppingcart                      Rollout resource added to informer: shoppingcart/shoppingcart
+30m         Normal    SuccessfulCreate         replicaset/shoppingcart-755f76544f        Created pod: shoppingcart-755f76544f-b4clr
+30m         Normal    SuccessfulCreate         replicaset/shoppingcart-755f76544f        Created pod: shoppingcart-755f76544f-7n7hl
+30m         Normal    SuccessfulCreate         replicaset/shoppingcart-755f76544f        Created pod: shoppingcart-755f76544f-vz5ts
+30m         Normal    SuccessfulCreate         replicaset/shoppingcart-755f76544f        Created pod: shoppingcart-755f76544f-l6lzn
+30m         Normal    Started                  pod/shoppingcart-755f76544f-vz5ts         Container started
+30m         Normal    Created                  pod/shoppingcart-755f76544f-vz5ts         Container created
+30m         Normal    SwitchService            rollout/shoppingcart                      Switched selector for service 'shoppingcart-canary' from '' to '755f76544f'
+30m         Normal    SwitchService            rollout/shoppingcart                      Switched selector for service 'shoppingcart-stable' from '' to '755f76544f'
+30m         Normal    Started                  pod/demo-traffic-687686f5bb-7944j         Container started
+30m         Normal    Created                  pod/demo-traffic-687686f5bb-7944j         Container created
+30m         Normal    Pulled                   pod/demo-traffic-687686f5bb-7944j         Successfully pulled image "python:3.12-alpine" in 6.598s (6.598s including waiting). Image size: 21423636 bytes.
+13m         Normal    RolloutNotCompleted      rollout/shoppingcart                      Rollout not completed, started update to revision 2 (698cbb9b64)
+13m         Normal    SuccessfulCreate         replicaset/shoppingcart-698cbb9b64        Created pod: shoppingcart-698cbb9b64-99qqt
+13m         Normal    RolloutUpdated           rollout/shoppingcart                      Rollout updated to revision 2
+13m         Normal    NewReplicaSetCreated     rollout/shoppingcart                      Created ReplicaSet shoppingcart-698cbb9b64 (revision 2)
+13m         Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled up ReplicaSet shoppingcart-698cbb9b64 (revision 2) from 0 to 1
+13m         Normal    Scheduled                pod/shoppingcart-698cbb9b64-99qqt         Successfully assigned shoppingcart/shoppingcart-698cbb9b64-99qqt to shoppingcart-control-plane
+13m         Normal    Started                  pod/shoppingcart-698cbb9b64-99qqt         Container started
+13m         Normal    Pulled                   pod/shoppingcart-698cbb9b64-99qqt         Container image "shoppingcart:v2" already present on machine and can be accessed by the pod
+13m         Normal    Created                  pod/shoppingcart-698cbb9b64-99qqt         Container created
+13m         Normal    SwitchService            rollout/shoppingcart                      Switched selector for service 'shoppingcart-canary' from '755f76544f' to '698cbb9b64'
+13m         Normal    RolloutStepCompleted     rollout/shoppingcart                      Rollout step 1/6 completed (setWeight: 25)
+13m         Normal    SuccessfulDelete         replicaset/shoppingcart-755f76544f        Deleted pod: shoppingcart-755f76544f-l6lzn
+13m         Normal    Killing                  pod/shoppingcart-755f76544f-l6lzn         Stopping container shoppingcart
+13m         Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled down ReplicaSet shoppingcart-755f76544f (revision 1) from 4 to 3
+13m         Normal    AnalysisRunRunning       rollout/shoppingcart                      Step Analysis Run 'shoppingcart-698cbb9b64-2-1' Status New: 'Running' Previous: ''
+11m         Normal    SuccessfulCreate         replicaset/shoppingcart-698cbb9b64        Created pod: shoppingcart-698cbb9b64-jmvx2
+11m         Normal    Pulled                   pod/shoppingcart-698cbb9b64-jmvx2         Container image "shoppingcart:v2" already present on machine and can be accessed by the pod
+11m         Normal    AnalysisRunSuccessful    rollout/shoppingcart                      Step Analysis Run 'shoppingcart-698cbb9b64-2-1' Status New: 'Successful' Previous: 'Running'
+11m         Normal    RolloutStepCompleted     rollout/shoppingcart                      Rollout step 2/6 completed (analysis)
+11m         Normal    MetricSuccessful         analysisrun/shoppingcart-698cbb9b64-2-1   Metric 'candidate-server-error-rate' Completed. Result: Successful
+11m         Normal    AnalysisRunSuccessful    analysisrun/shoppingcart-698cbb9b64-2-1   Analysis Completed. Result: Successful
+11m         Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled up ReplicaSet shoppingcart-698cbb9b64 (revision 2) from 1 to 2
+11m         Normal    Scheduled                pod/shoppingcart-698cbb9b64-jmvx2         Successfully assigned shoppingcart/shoppingcart-698cbb9b64-jmvx2 to shoppingcart-control-plane
+11m         Normal    Started                  pod/shoppingcart-698cbb9b64-jmvx2         Container started
+11m         Normal    Created                  pod/shoppingcart-698cbb9b64-jmvx2         Container created
+11m         Normal    Killing                  pod/shoppingcart-755f76544f-vz5ts         Stopping container shoppingcart
+11m         Normal    SuccessfulDelete         replicaset/shoppingcart-755f76544f        Deleted pod: shoppingcart-755f76544f-vz5ts
+11m         Normal    AnalysisRunRunning       rollout/shoppingcart                      Step Analysis Run 'shoppingcart-698cbb9b64-2-3' Status New: 'Running' Previous: ''
+11m         Warning   Unhealthy                pod/shoppingcart-755f76544f-vz5ts         Readiness probe failed: Get "http://10.244.0.20:8080/health/ready": dial tcp 10.244.0.20:8080: connect: connection refused
+11m         Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled down ReplicaSet shoppingcart-755f76544f (revision 1) from 3 to 2
+11m         Normal    RolloutStepCompleted     rollout/shoppingcart                      Rollout step 3/6 completed (setWeight: 50)
+9m35s       Normal    Pulled                   pod/shoppingcart-698cbb9b64-w6pj8         Container image "shoppingcart:v2" already present on machine and can be accessed by the pod
+9m35s       Normal    MetricSuccessful         analysisrun/shoppingcart-698cbb9b64-2-3   Metric 'candidate-server-error-rate' Completed. Result: Successful
+9m35s       Normal    AnalysisRunSuccessful    analysisrun/shoppingcart-698cbb9b64-2-3   Analysis Completed. Result: Successful
+9m35s       Normal    SuccessfulCreate         replicaset/shoppingcart-698cbb9b64        Created pod: shoppingcart-698cbb9b64-w6pj8
+9m35s       Normal    Created                  pod/shoppingcart-698cbb9b64-w6pj8         Container created
+9m35s       Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled up ReplicaSet shoppingcart-698cbb9b64 (revision 2) from 2 to 3
+9m35s       Normal    Scheduled                pod/shoppingcart-698cbb9b64-w6pj8         Successfully assigned shoppingcart/shoppingcart-698cbb9b64-w6pj8 to shoppingcart-control-plane
+9m35s       Normal    RolloutStepCompleted     rollout/shoppingcart                      Rollout step 4/6 completed (analysis)
+9m35s       Normal    AnalysisRunSuccessful    rollout/shoppingcart                      Step Analysis Run 'shoppingcart-698cbb9b64-2-3' Status New: 'Successful' Previous: 'Running'
+9m35s       Normal    Started                  pod/shoppingcart-698cbb9b64-w6pj8         Container started
+9m29s       Warning   Unhealthy                pod/shoppingcart-698cbb9b64-w6pj8         Startup probe failed: Get "http://10.244.0.25:8080/health/live": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+9m24s       Normal    SuccessfulDelete         replicaset/shoppingcart-755f76544f        Deleted pod: shoppingcart-755f76544f-7n7hl
+9m24s       Normal    Scheduled                pod/shoppingcart-698cbb9b64-2fqvn         Successfully assigned shoppingcart/shoppingcart-698cbb9b64-2fqvn to shoppingcart-control-plane
+9m24s       Normal    SuccessfulCreate         replicaset/shoppingcart-698cbb9b64        Created pod: shoppingcart-698cbb9b64-2fqvn
+9m24s       Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled up ReplicaSet shoppingcart-698cbb9b64 (revision 2) from 3 to 4
+9m24s       Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled down ReplicaSet shoppingcart-755f76544f (revision 1) from 2 to 1
+9m24s       Normal    Started                  pod/shoppingcart-698cbb9b64-2fqvn         Container started
+9m24s       Normal    Created                  pod/shoppingcart-698cbb9b64-2fqvn         Container created
+9m24s       Normal    Pulled                   pod/shoppingcart-698cbb9b64-2fqvn         Container image "shoppingcart:v2" already present on machine and can be accessed by the pod
+9m24s       Normal    Killing                  pod/shoppingcart-755f76544f-7n7hl         Stopping container shoppingcart
+9m18s       Normal    Killing                  pod/shoppingcart-755f76544f-b4clr         Stopping container shoppingcart
+9m18s       Normal    SuccessfulDelete         replicaset/shoppingcart-755f76544f        Deleted pod: shoppingcart-755f76544f-b4clr
+9m18s       Normal    ScalingReplicaSet        rollout/shoppingcart                      Scaled down ReplicaSet shoppingcart-755f76544f (revision 1) from 1 to 0
+9m18s       Normal    RolloutStepCompleted     rollout/shoppingcart                      Rollout step 5/6 completed (setWeight: 100)
+7m38s       Normal    MetricSuccessful         analysisrun/shoppingcart-698cbb9b64-2-5   Metric 'candidate-server-error-rate' Completed. Result: Successful
+7m38s       Normal    AnalysisRunSuccessful    analysisrun/shoppingcart-698cbb9b64-2-5   Analysis Completed. Result: Successful
+5m37s       Normal    Pulled                   pod/shoppingcart-86d465b4f7-nz5xq         Container image "shoppingcart:bad" already present on machine and can be accessed by the pod
+5m37s       Normal    SuccessfulCreate         replicaset/shoppingcart-86d465b4f7        Created pod: shoppingcart-86d465b4f7-nz5xq
+5m37s       Normal    Scheduled                pod/shoppingcart-86d465b4f7-nz5xq         Successfully assigned shoppingcart/shoppingcart-86d465b4f7-nz5xq to shoppingcart-control-plane
+5m37s       Normal    Created                  pod/shoppingcart-86d465b4f7-nz5xq         Container created
+5m37s       Normal    Started                  pod/shoppingcart-86d465b4f7-nz5xq         Container started
+5m30s       Normal    SuccessfulDelete         replicaset/shoppingcart-698cbb9b64        Deleted pod: shoppingcart-698cbb9b64-2fqvn
+5m30s       Normal    Killing                  pod/shoppingcart-698cbb9b64-2fqvn         Stopping container shoppingcart
+4m30s       Normal    SuccessfulCreate         replicaset/shoppingcart-698cbb9b64        Created pod: shoppingcart-698cbb9b64-cnr6j
+4m30s       Normal    Pulled                   pod/shoppingcart-698cbb9b64-cnr6j         Container image "shoppingcart:v2" already present on machine and can be accessed by the pod
+4m30s       Normal    Scheduled                pod/shoppingcart-698cbb9b64-cnr6j         Successfully assigned shoppingcart/shoppingcart-698cbb9b64-cnr6j to shoppingcart-control-plane
+4m30s       Warning   AnalysisRunFailed        analysisrun/shoppingcart-86d465b4f7-3-1   Analysis Completed. Result: Failed
+4m30s       Warning   MetricFailed             analysisrun/shoppingcart-86d465b4f7-3-1   Metric 'candidate-server-error-rate' Completed. Result: Failed
+4m30s       Normal    Created                  pod/shoppingcart-698cbb9b64-cnr6j         Container created
+4m30s       Normal    Started                  pod/shoppingcart-698cbb9b64-cnr6j         Container started
+4m30s       Warning   AnalysisRunFailed        rollout/shoppingcart                      Step Analysis Run 'shoppingcart-86d465b4f7-3-1' Status New: 'Failed' Previous: 'Running'
+4m24s       Normal    Killing                  pod/shoppingcart-86d465b4f7-nz5xq         Stopping container shoppingcart
+4m24s       Normal    SuccessfulDelete         replicaset/shoppingcart-86d465b4f7        Deleted pod: shoppingcart-86d465b4f7-nz5xq

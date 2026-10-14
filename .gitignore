@@ -1,0 +1,10 @@
+target/
+.idea/
+.DS_Store
+.env
+infra/terraform/.terraform/
+infra/terraform/*.tfstate*
+infra/terraform/terraform.tfvars
+infra/terraform/tfplan
+results/
+__pycache__/

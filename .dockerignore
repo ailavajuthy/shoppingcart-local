@@ -1,0 +1,8 @@
+.git
+.idea
+target
+infra
+gitops
+results
+*.zip
+.env

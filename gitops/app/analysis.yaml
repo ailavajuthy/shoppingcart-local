@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: shoppingcart-health
+  namespace: shoppingcart
+spec:
+  args:
+  - name: hash
+  metrics:
+  - name: candidate-server-error-rate
+    initialDelay: 60s
+    interval: 20s
+    count: 3
+    failureLimit: 0
+    successCondition: len(result) == 1 && result[0] < 0.05
+    provider:
+      prometheus:
+        address: http://prometheus.monitoring.svc.cluster.local:9090
+        query: ((sum(increase(shoppingcart_requests_total{rollout_hash="{{args.hash}}",status=~"5.."}[1m]))
+          / clamp_min(sum(increase(shoppingcart_requests_total{rollout_hash="{{args.hash}}"}[1m])),
+          1)) and on() (sum(increase(shoppingcart_requests_total{rollout_hash="{{args.hash}}"}[1m]))
+          >= 20)) or on() vector(1)

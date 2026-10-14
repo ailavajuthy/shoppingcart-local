@@ -1,0 +1,84 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: shoppingcart
+  namespace: shoppingcart
+spec:
+  replicas: 4
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: shoppingcart
+  template:
+    metadata:
+      labels:
+        app: shoppingcart
+    spec:
+      containers:
+      - name: shoppingcart
+        image: shoppingcart:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        env:
+        - name: DB_URL
+          value: jdbc:postgresql://postgres:5432/shopping_cart_db?connectTimeout=3&socketTimeout=5
+        - name: DB_USER
+          value: shoppingcart
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: password
+        resources:
+          requests:
+            cpu: 100m
+            memory: 192Mi
+          limits:
+            cpu: 500m
+            memory: 384Mi
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          periodSeconds: 5
+          failureThreshold: 36
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          periodSeconds: 10
+          failureThreshold: 3
+  strategy:
+    canary:
+      stableService: shoppingcart-stable
+      canaryService: shoppingcart-canary
+      maxSurge: 1
+      maxUnavailable: 0
+      steps:
+      - setWeight: 25
+      - &id001
+        analysis:
+          templates:
+          - templateName: shoppingcart-health
+          args:
+          - name: hash
+            valueFrom:
+              podTemplateHashValue: Latest
+      - setWeight: 50
+      - *id001
+      - setWeight: 100
+      - *id001

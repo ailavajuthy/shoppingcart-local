@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: shoppingcart
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR_USERNAME/shoppingcart-local.git
+    targetRevision: main
+    path: gitops/app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: shoppingcart
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - RespectIgnoreDifferences=true
+  ignoreDifferences:
+  - group: ''
+    kind: Service
+    name: shoppingcart-stable
+    namespace: shoppingcart
+    jqPathExpressions:
+    - .spec.selector."rollouts-pod-template-hash"
+  - group: ''
+    kind: Service
+    name: shoppingcart-canary
+    namespace: shoppingcart
+    jqPathExpressions:
+    - .spec.selector."rollouts-pod-template-hash"

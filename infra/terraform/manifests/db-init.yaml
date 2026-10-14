@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-init
+  namespace: shoppingcart
+data:
+  001-init.sql: "CREATE TABLE users (\n user_id SERIAL PRIMARY KEY, name TEXT NOT\
+    \ NULL, email TEXT NOT NULL UNIQUE,\n password TEXT NOT NULL, phone TEXT NOT NULL\
+    \ UNIQUE,\n CONSTRAINT chk_phone CHECK (phone ~ '^[0-9]{10,15}$')\n);\nCREATE\
+    \ TABLE product (\n product_id SERIAL PRIMARY KEY, product_name TEXT NOT NULL,\
+    \ description TEXT,\n price NUMERIC(12,2) NOT NULL CHECK(price>=0), stock_quantity\
+    \ INT NOT NULL CHECK(stock_quantity>=0), category TEXT NOT NULL\n);\nCREATE TABLE\
+    \ shopping_cart (cart_id SERIAL PRIMARY KEY, user_id INT NOT NULL UNIQUE REFERENCES\
+    \ users(user_id));\nCREATE TABLE cart_items (\n cart_id INT REFERENCES shopping_cart(cart_id)\
+    \ ON DELETE CASCADE,\n product_id INT REFERENCES product(product_id), quantity\
+    \ INT NOT NULL CHECK(quantity>0), PRIMARY KEY(cart_id,product_id)\n);\nCREATE\
+    \ TABLE orders (order_id SERIAL PRIMARY KEY, user_id INT REFERENCES users(user_id),\
+    \ order_date TIMESTAMPTZ NOT NULL DEFAULT NOW(), total_amount NUMERIC(12,2) NOT\
+    \ NULL, payment_status TEXT NOT NULL DEFAULT 'PAID');\nCREATE TABLE order_items\
+    \ (order_id INT REFERENCES orders(order_id), product_id INT REFERENCES product(product_id),\
+    \ quantity INT NOT NULL, unit_price NUMERIC(12,2) NOT NULL, PRIMARY KEY(order_id,product_id));\n\
+    CREATE TABLE app_sessions (token TEXT PRIMARY KEY, user_id INT NOT NULL REFERENCES\
+    \ users(user_id) ON DELETE CASCADE, expires_at TIMESTAMPTZ NOT NULL);\nCREATE\
+    \ INDEX app_sessions_expiry ON app_sessions(expires_at);\nCREATE FUNCTION add_to_cart(uid\
+    \ INT, pid INT, qty INT) RETURNS TEXT LANGUAGE plpgsql AS $$\nDECLARE cid INT;\
+    \ stock INT; existing INT;\nBEGIN\n IF qty<=0 THEN RAISE EXCEPTION 'Quantity must\
+    \ be positive'; END IF;\n INSERT INTO shopping_cart(user_id) VALUES(uid) ON CONFLICT(user_id)\
+    \ DO NOTHING;\n SELECT cart_id INTO cid FROM shopping_cart WHERE user_id=uid FOR\
+    \ UPDATE;\n SELECT stock_quantity INTO stock FROM product WHERE product_id=pid;\n\
+    \ IF NOT FOUND THEN RAISE EXCEPTION 'Product not found'; END IF;\n SELECT COALESCE((SELECT\
+    \ quantity FROM cart_items WHERE cart_id=cid AND product_id=pid),0) INTO existing;\n\
+    \ IF existing+qty>stock THEN RAISE EXCEPTION 'Insufficient stock'; END IF;\n INSERT\
+    \ INTO cart_items(cart_id,product_id,quantity) VALUES(cid,pid,qty)\n ON CONFLICT(cart_id,product_id)\
+    \ DO UPDATE SET quantity=cart_items.quantity+EXCLUDED.quantity;\n RETURN 'SUCCESS';\n\
+    END $$;\nCREATE FUNCTION get_cart_total(uid INT) RETURNS NUMERIC LANGUAGE sql\
+    \ AS $$\n SELECT COALESCE(SUM(p.price*ci.quantity),0) FROM shopping_cart sc JOIN\
+    \ cart_items ci USING(cart_id) JOIN product p USING(product_id) WHERE sc.user_id=uid;\n\
+    $$;\nCREATE FUNCTION checkout_cart(uid INT) RETURNS TEXT LANGUAGE plpgsql AS $$\n\
+    DECLARE cid INT; oid INT; total NUMERIC; item RECORD;\nBEGIN\n SELECT cart_id\
+    \ INTO cid FROM shopping_cart WHERE user_id=uid FOR UPDATE;\n IF cid IS NULL OR\
+    \ NOT EXISTS(SELECT 1 FROM cart_items WHERE cart_id=cid) THEN RETURN 'Cart is\
+    \ empty'; END IF;\n -- Lock products in the same order across transactions before\
+    \ checking stock.\n PERFORM p.product_id FROM product p JOIN cart_items ci USING(product_id)\
+    \ WHERE ci.cart_id=cid ORDER BY p.product_id FOR UPDATE OF p;\n IF EXISTS(SELECT\
+    \ 1 FROM cart_items ci JOIN product p USING(product_id) WHERE ci.cart_id=cid AND\
+    \ ci.quantity>p.stock_quantity) THEN RETURN 'Insufficient stock'; END IF;\n total\
+    \ := get_cart_total(uid);\n INSERT INTO orders(user_id,total_amount) VALUES(uid,total)\
+    \ RETURNING order_id INTO oid;\n INSERT INTO order_items SELECT oid,ci.product_id,ci.quantity,p.price\
+    \ FROM cart_items ci JOIN product p USING(product_id) WHERE ci.cart_id=cid;\n\
+    \ UPDATE product p SET stock_quantity=p.stock_quantity-ci.quantity FROM cart_items\
+    \ ci WHERE ci.cart_id=cid AND ci.product_id=p.product_id;\n DELETE FROM cart_items\
+    \ WHERE cart_id=cid;\n RETURN 'SUCCESS order ' || oid;\nEND $$;\nINSERT INTO product(product_name,description,price,stock_quantity,category)\
+    \ VALUES\n ('Headphones','Wireless demo headphones',1499,10000,'Electronics'),\n\
+    \ ('Running Shoes','Demo sports shoes',2499,10000,'Footwear'),\n ('DevOps Handbook','Demo\
+    \ learning book',699,10000,'Books'),\n ('Backpack','Demo backpack',999,10000,'Accessories'),\n\
+    \ ('Football','Demo football',599,10000,'Sports');\nINSERT INTO users(name,email,password,phone)\
+    \ VALUES('Demo Student','demo@example.com','demo123','9876543210');\n"
