@@ -7,5 +7,5 @@ resources:
 - traffic.yaml
 images:
 - name: shoppingcart
-  newName: shoppingcart
-  newTag: v2
+  newName: ghcr.io/ailavajuthy/shoppingcart-local
+  newTag: 7e142717e1463f7613a369af5541aa1d67aa7270
